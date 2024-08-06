@@ -41,7 +41,6 @@ class UserService {
     return token;
   }
   async refresh(refreshToken) {
-    console.log("refresh token", refreshToken);
     if (!refreshToken) {
       throw ApiError.unauthorizedError();
     }
@@ -50,7 +49,7 @@ class UserService {
     if (!userData || !tokenFromDb) {
       throw ApiError.unauthorizedError();
     }
-    const user = await UserModel.findById(userData.id);
+    const user = await User.findById(userData.id);
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
 

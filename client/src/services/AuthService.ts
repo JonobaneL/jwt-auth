@@ -1,6 +1,6 @@
 import api from "@/http";
 import { AuthResponse } from "@/models/authResponse";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export default class AuthService {
   static async login(
@@ -17,5 +17,14 @@ export default class AuthService {
     password: string
   ): Promise<AxiosResponse<AuthResponse>> {
     return api.post("/registration", { email, password });
+  }
+  static async refreshToken(): Promise<AxiosResponse<AuthResponse>> {
+    return axios.get(`${import.meta.env.VITE_API_URL}/refresh`, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
   }
 }

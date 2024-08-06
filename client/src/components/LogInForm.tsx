@@ -5,15 +5,16 @@ import { emailValidation, passwordValidation } from "@/lib/formvalidation";
 import Field from "./ui/Field";
 import { useTypedDispatch } from "@/hooks/useReduxTypedHooks";
 import { logInThunk } from "./store/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const LogInForm = () => {
   const { register, handleSubmit, formState } = useForm<LogInFormParams>({
     mode: "onBlur",
   });
+  const navigate = useNavigate();
   const dispatch = useTypedDispatch();
   const onSubmit = (formData: LogInFormParams) => {
-    console.log(formData);
-    dispatch(logInThunk(formData));
+    dispatch(logInThunk(formData)).then(() => navigate("/"));
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

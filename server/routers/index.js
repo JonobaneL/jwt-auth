@@ -12,7 +12,7 @@ router.post(
 );
 router.post("/login", userController.login);
 router.post("/logout", userController.logout);
-router.post("/refresh", userController.refresh);
-router.post("/users", authMiddleware, userController.getUsers);
+router.get("/refresh", userController.refresh);
+router.get("/users", authMiddleware, userController.getUsers);
 
 module.exports = router;

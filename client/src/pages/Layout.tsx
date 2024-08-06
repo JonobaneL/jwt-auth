@@ -8,7 +8,6 @@ const Layout = () => {
   const dispatch = useTypedDispatch();
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      console.log(localStorage.getItem("token"));
       dispatch(checkIsAuth());
     }
   }, []);

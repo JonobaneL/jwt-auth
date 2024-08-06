@@ -1,4 +1,4 @@
-const userService = require("../service/user-servive");
+const userService = require("../service/user-service");
 const { validationResult } = require("express-validator");
 const ApiError = require("../api-error");
 
@@ -15,6 +15,7 @@ class UserController {
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
+        sameSite: "strict",
       });
       return res.json(userData);
     } catch (err) {
@@ -29,6 +30,7 @@ class UserController {
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
         httpOnly: true,
+        sameSite: "strict",
       });
       return res.json(userData);
     } catch (err) {
@@ -38,7 +40,6 @@ class UserController {
   async logout(req, res, next) {
     try {
       const refreshToken = req.cookies.refreshToken;
-      console.log(refreshToken);
       const token = await userService.logout(refreshToken);
       res.clearCookie("refreshToken");
       return res.json(token);
@@ -48,7 +49,7 @@ class UserController {
   }
   async refresh(req, res, next) {
     try {
-      const { refreshToken } = req.cookies;
+      const refreshToken = req.cookies.refreshToken;
       const userData = await userService.refresh(refreshToken);
       res.cookie("refreshToken", userData.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,

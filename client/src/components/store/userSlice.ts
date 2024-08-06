@@ -1,6 +1,6 @@
 import { AuthResponse, User } from "@/models/authResponse";
-import { createAsyncThunk, createSlice, isAction } from "@reduxjs/toolkit";
-import AuthService from "../services/AuthService";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import AuthService from "../../services/AuthService";
 import axios from "axios";
 
 type initialStateProps = {
@@ -21,7 +21,6 @@ export const logInThunk = createAsyncThunk<User, UserProps>(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const res = await AuthService.login(email, password);
-      console.log(res);
       localStorage.setItem("token", res.data.accessToken);
       return res.data.user;
     } catch (err) {
@@ -35,7 +34,6 @@ export const signUpThunk = createAsyncThunk<User, UserProps>(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const res = await AuthService.signup(email, password);
-      console.log(res);
       localStorage.setItem("token", res.data.accessToken);
       return res.data.user;
     } catch (err) {
@@ -47,8 +45,11 @@ export const logOutThunk = createAsyncThunk<void, undefined>(
   "user/log-out",
   async (_, { rejectWithValue }) => {
     try {
+      console.log("log-thunck");
+      // const navigate = useNavigate();
       await AuthService.logout();
       localStorage.removeItem("token");
+      // navigate("/log-in");
     } catch (err) {
       return rejectWithValue("something wrong");
     }
@@ -59,7 +60,7 @@ export const checkIsAuth = createAsyncThunk<User, undefined>(
   "user/auth-check",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await axios.post<AuthResponse>(
+      const res = await axios.get<AuthResponse>(
         `${import.meta.env.VITE_API_URL}/refresh`,
         {
           withCredentials: true,
@@ -69,7 +70,6 @@ export const checkIsAuth = createAsyncThunk<User, undefined>(
           },
         }
       );
-      console.log(res);
       localStorage.setItem("token", res.data.accessToken);
       return res.data.user;
     } catch (err) {

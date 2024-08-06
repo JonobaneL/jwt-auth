@@ -9,17 +9,18 @@ import {
 } from "@/lib/formvalidation";
 import { useTypedDispatch } from "@/hooks/useReduxTypedHooks";
 import { signUpThunk } from "./store/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const SignUpForm = () => {
   const { register, handleSubmit, formState } = useForm<SignUpFormParams>({
     mode: "onBlur",
   });
+  const navigate = useNavigate();
   const dispatch = useTypedDispatch();
   const onSubmit = (formData: SignUpFormParams) => {
-    console.log(formData);
     dispatch(
       signUpThunk({ email: formData.email, password: formData.confirmPassword })
-    );
+    ).then(() => navigate("/"));
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
